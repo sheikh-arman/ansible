@@ -1,0 +1,9 @@
+---
+- name: Test Ansible Connection
+  hosts: all
+  remote_user: ubuntu
+  roles:
+    - python
+#  tasks:
+#    - name: Ping all hosts
+#      ansible.builtin.ping:
