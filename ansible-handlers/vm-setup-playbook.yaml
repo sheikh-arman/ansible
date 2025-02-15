@@ -1,9 +1,16 @@
 ---
 - name: Test Ansible Connection
   hosts: all
+  become: yes
   remote_user: ubuntu
   roles:
-    - python
+    - handlers
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
 #  tasks:
 #    - name: Ping all hosts
 #      ansible.builtin.ping:

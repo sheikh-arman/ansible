@@ -1,0 +1,50 @@
+---
+# Boolean Condition check for installing nginx
+- name: Update apt cache and Install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: install_nginx_flag
+
+- name: index.html copy
+  template: src=index.html dest=/usr/share/nginx/html/index.html
+  when: file
+
+# Putting multiple condition using ansible_facts
+- name: Combine conditions using ansible facts
+  debug:
+    var: ansible_facts['kernel_version']
+
+  when:
+    - ansible_facts['os_family'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "24"
+
+# Setting complex condition
+- name: Setting Complex conditions using ansible facts
+  debug:
+    var: ansible_facts['kernel_version']
+  when:
+    - ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] | int >= 20
+    -
+- name: Copy test-file.txt
+  template: src=test-file.txt dest=./test-file.txt
+
+- name: Register a variable
+  ansible.builtin.command: cat /home/ubuntu/test-file.txt
+  register: test_file
+
+- name: use variable in a condition statement
+  debug:
+    var: test_file.stdout
+  when: test_file.stdout.find('hi') != -1
+
+- name: Run with items greater than 5
+  ansible.builtin.command: echo {{ item }}
+  loop: [0, 2, 4, 6, 8, 10]
+  when: item | int > 5
+
+- name: Create directory
+  file:
+    path: ./basic-test-arman
+    state: directory

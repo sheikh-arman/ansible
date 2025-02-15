@@ -1,0 +1,4 @@
+---
+- name: index.html copy
+  template: src=index.html dest=./index.html
+  when: file

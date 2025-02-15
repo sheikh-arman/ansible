@@ -1,0 +1,39 @@
+---
+- name: Test Ansible Connection
+  hosts: all
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - condition
+    - install-nginx
+  vars_files:
+    - my_vars.yml
+  tasks:
+    - name: Environment var for only task level
+      environment:
+        MY_TASK_LEVEL_VARIABLE: "Hello World!"
+      ansible.builtin.shell: "echo $MY_TASK_LEVEL_VARIABLE"
+      register: task_level_output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

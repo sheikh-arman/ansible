@@ -1,0 +1,17 @@
+---
+# Boolean Condition check for installing nginx
+- import_tasks: copyindex.yaml
+- import_tasks: createdir.yaml
+- name: Update apt cache and Install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: install_nginx_flag
+
+
+
+
+
+
+
