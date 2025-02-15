@@ -1,0 +1,2 @@
+[harvester-host]
+10.2.0.231 ansible_ssh_private_key_file=/home/dark/.ssh/id_rsa

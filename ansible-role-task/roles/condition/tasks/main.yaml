@@ -1,0 +1,23 @@
+---
+
+# Putting multiple condition using ansible_facts
+- name: Combine conditions using ansible facts
+  debug:
+    var: ansible_facts['kernel_version']
+
+  when:
+    - ansible_facts['os_family'] == "Debian"
+    - ansible_facts['distribution_major_version'] == "24"
+
+# Setting complex condition
+- name: Setting Complex conditions using ansible facts
+  debug:
+    var: ansible_facts['kernel_version']
+  when:
+    - ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] | int >= 20
+
+- name: Run with items greater than 5
+  ansible.builtin.command: echo {{ item }}
+  loop: [0, 2, 4, 6, 8, 10]
+  when: item | int > 5
+
