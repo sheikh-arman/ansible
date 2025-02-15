@@ -1,0 +1,19 @@
+---
+- name: Update apt cache and Install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+
+- name: index.html copy
+  template: src=index.html dest=/usr/share/nginx/html/index.html
+
+- name: update.html copy
+  template: src=updated.html dest=/usr/share/nginx/html/index.html
+#  notify:
+#    - Restart Nginx
+
+- name: Create directory
+  file:
+    path: ./basic-test-arman
+    state: directory
