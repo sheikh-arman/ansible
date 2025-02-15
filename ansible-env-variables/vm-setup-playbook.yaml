@@ -1,0 +1,60 @@
+---
+- name: Test Ansible Connection
+  hosts: all
+  become: yes
+  remote_user: ubuntu
+#  roles:
+#    - handlers
+  # global env
+  environment:
+    EXAMPLE: "Foo bar"
+    MY_VAR1: "variable value1"
+
+  tasks:
+    - name: Environment var at playbook level
+      ansible.builtin.shell: "echo $EXAMPLE"
+      register: example_output
+
+    - name: Display EXAMPLE output
+      ansible.builtin.debug:
+        msg: "{{ example_output.stdout }}"
+
+    - name: Environment var for only task level
+      environment:
+        MY_TASK_LEVEL_VARIABLE: "Hello World!"
+      ansible.builtin.shell: "echo $MY_TASK_LEVEL_VARIABLE"
+      register: task_level_output
+
+    - name: Display MY_TASK_LEVEL_VARIABLE output
+      ansible.builtin.debug:
+        msg: "{{ task_level_output.stdout }}"
+
+    - name: Testing both playbook-level and task-level environment vars
+      ansible.builtin.shell: "echo $EXAMPLE $MY_TASK_LEVEL_VARIABLE"
+      register: both_vars_output
+
+    - name: Display EXAMPLE and MY_TASK_LEVEL_VARIABLE output
+      ansible.builtin.debug:
+        msg: "{{ both_vars_output.stdout }}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

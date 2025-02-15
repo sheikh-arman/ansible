@@ -4,3 +4,29 @@ Run `ansible-playbook --inventory inventory/vm-setup-playbook/hosts vm-setup-pla
 
 # runtime variable
 Run `ansible-playbook --inventory inventory/vm-setup-playbook/hosts vm-setup-playbook.yaml --extra-vars '{"version":"1.0","other_variable":"foo"}'`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
