@@ -1,0 +1,72 @@
+---
+- name: Set pwd
+  shell: "pwd"
+  register: path
+
+- debug:
+    msg: "{{path.stdout}}"
+
+#- name: Run the hugo command locally
+#  connection: local
+#  shell: "cd .. && hugo"
+#  register: localPath
+#
+#- debug:
+#    msg: "{{ localPath.stdout }}"
+
+- debug:
+    msg: "{{projectPath}}/public/*"
+- debug:
+    msg: "{{projectPath}}/{{zipFileName}}"
+
+- name: Comppress directory {{projectPath}}/public/ into {{projectPath}}/{{zipFileName}}
+  connection: local
+  community.general.archive:
+    path: "{{projectPath}}/public/*"
+    dest: "{{projectPath}}/{{zipFileName}}"
+    format: zip
+
+
+
+- name: Copy {{projectPath}}/{{zipFileName}} to JHooq.com
+  ansible.builtin.copy:
+    src: "{{projectPath}}/{{zipFileName}}"
+    dest: "{{destinationDirectory}}"
+    mode: 0770
+
+
+
+- name: Extract {{destinationDirectory}}/{{zipFileName}} into {{destinationDirectory}}
+  ansible.builtin.unarchive:
+    src: "{{destinationDirectory}}/{{zipFileName}}"
+    dest: "{{destinationDirectory}}"
+    remote_src: "yes"
+
+- name: Remove the {{destinationDirectory}}/{{zipFileName}}
+  ansible.builtin.file:
+    path: "{{destinationDirectory}}/{{zipFileName}}"
+    state: absent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

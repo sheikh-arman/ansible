@@ -1,3 +1,8 @@
+# ansible Install
+sudo apt update
+
+sudo apt install ansible -y
+
 # ansible
 cd ansible-handlers
 
