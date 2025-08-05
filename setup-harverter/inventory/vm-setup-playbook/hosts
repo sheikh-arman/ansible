@@ -1,7 +1,0 @@
-[blue]
-vm1 ansible_host=10.2.0.60 ansible_ssh_private_key_file=/home/dark/.ssh/id_rsa
-vm2 ansible_host=10.2.0.56 ansible_ssh_private_key_file=/home/dark/.ssh/id_rsa
-
-[green]
-10.2.0.27 ansible_ssh_private_key_file=/home/dark/.ssh/id_rsa
-10.2.0.198 ansible_ssh_private_key_file=/home/dark/.ssh/id_rsa
