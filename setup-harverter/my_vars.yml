@@ -14,9 +14,9 @@ helm_charts:
     version: v2025.6.30
 license_ids:
   vm1:
-    kubedb_license_id: 5cbaa329-13d6-4d6d-a50f-2875bd93f83c
+    kubedb_license_id: c5e631d1-1789-4fb9-ad32-8d87de3dc392
   vm2:
-    kubedb_license_id: 5cbaa329-13d6-4d6d-a50f-2875bd93f83c
+    kubedb_license_id: 3172c203-802f-47b9-b96c-86fdb604e7f9
 
 
 
