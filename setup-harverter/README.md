@@ -2,8 +2,12 @@
 
 cd setup-harvester
 
-Run `ansible-playbook --inventory inventory/vm-setup-playbook/hosts vm-setup-playbook.yaml`
+# install k3s cluster
 
-# runtime variable
+Run `ansible-playbook --inventory inventory/vm-setup-playbook/hosts k3s.yaml --limit blue`
 
-Run `ansible-playbook --inventory inventory/vm-setup-playbook/hosts vm-setup-playbook.yaml --limit blue`
+# Setup Cluster
+
+install kubedb,kubestash,promethus,cert-manager,panopticon,metrics
+
+`ansible-playbook --inventory inventory/vm-setup-playbook/hosts setup-cluster.yaml --limit blue`

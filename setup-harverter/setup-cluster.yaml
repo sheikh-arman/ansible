@@ -4,26 +4,9 @@
   become: yes
   remote_user: ubuntu
   roles:
-    - condition
+    - cluster
   vars_files:
     - my_vars.yml
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

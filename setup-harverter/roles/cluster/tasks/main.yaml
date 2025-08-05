@@ -1,0 +1,118 @@
+---
+
+- name: Copy KubeDB license file to remote node
+  ansible.builtin.copy:
+    src: ~/Downloads/kubedb-license-{{ license_ids[inventory_hostname].kubedb_license_id }}.txt
+    dest: /tmp/helm-licenses/kubedb-license.txt
+    mode: '0644'
+  run_once: true
+
+- name: Add Helm repositories
+  ansible.builtin.command: |
+    helm repo add {{ item.name }} {{ item.url }}
+  loop:
+    - { name: longhorn, url: https://charts.longhorn.io }
+    - { name: appscode, url: https://charts.appscode.com/stable/ }
+    - { name: prometheus-community, url: https://prometheus-community.github.io/helm-charts }
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Update Helm repositories
+  ansible.builtin.command: helm repo update
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install KubeDB Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i kubedb oci://ghcr.io/appscode-charts/kubedb \
+      --version {{ helm_charts.kubedb.version }} \
+      --namespace kubedb --create-namespace \
+      --set-file global.license=/tmp/helm-licenses/kubedb-license.txt \
+      --wait --burst-limit=10000 --debug
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install KubeStash Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i kubestash oci://ghcr.io/appscode-charts/kubestash \
+      --version {{ helm_charts.kubestash.version }} \
+      --namespace stash --create-namespace \
+      --set-file global.license=/tmp/helm-licenses/kubedb-license.txt \
+      --wait --burst-limit=10000 --debug
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install Longhorn Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i longhorn longhorn/longhorn \
+      --namespace longhorn-system --create-namespace \
+      --version {{ helm_charts.longhorn.version }}
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install KubeDB Metrics Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i kubedb-metrics appscode/kubedb-metrics \
+      --namespace kubedb --create-namespace \
+      --version {{ helm_charts.kubedb_metrics.version }}
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install Kube Prometheus Stack Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i prometheus prometheus-community/kube-prometheus-stack \
+      --namespace monitoring --create-namespace \
+      --version {{ helm_charts.kube_prometheus_stack.version }} \
+      --set grafana.image.tag=7.5.5
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Install Panopticon Helm chart
+  ansible.builtin.command: |
+    helm upgrade -i panopticon appscode/panopticon \
+      --namespace kubeops --create-namespace \
+      --version {{ helm_charts.panopticon.version }} \
+      --set monitoring.enabled=true \
+      --set monitoring.agent=prometheus.io/operator \
+      --set monitoring.serviceMonitor.labels.release=prometheus \
+      --set-file global.license=/tmp/helm-licenses/kubedb-license.txt
+  args:
+    executable: /bin/bash
+  environment:
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+  changed_when: true
+  run_once: true
+
+- name: Remove temporary license directory
+  ansible.builtin.file:
+    path: /tmp/helm-licenses
+    state: absent
+  run_once: true

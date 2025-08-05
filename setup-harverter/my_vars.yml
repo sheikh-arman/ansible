@@ -1,7 +1,23 @@
 ---
-projectPath: "/home/dark/go/src/github.com/sheikh-arman/ansible"
-destinationDirectory: "/home/ubuntu/ansible"
-zipFileName: "jhooq.zip"
+helm_charts:
+  kubedb:
+    version: v2025.7.30-rc.0
+  kubestash:
+    version: v2025.6.30
+  longhorn:
+    version: 1.8.2
+  kubedb_metrics:
+    version: v2024.8.21
+  kube_prometheus_stack:
+    version: 65.0.1  # Latest version from prometheus-community/kube-prometheus-stack as of Aug 2025
+  panopticon:
+    version: v2025.6.30
+license_ids:
+  vm1:
+    kubedb_license_id: 5cbaa329-13d6-4d6d-a50f-2875bd93f83c
+  vm2:
+    kubedb_license_id: 5cbaa329-13d6-4d6d-a50f-2875bd93f83c
+
 
 
 
