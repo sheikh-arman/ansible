@@ -1,0 +1,32 @@
+---
+- name: Test Ansible Connection
+  hosts: all
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - condition
+  vars_files:
+    - my_vars.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
