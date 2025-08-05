@@ -1,0 +1,94 @@
+---
+- name: Set pwd
+  shell: "pwd"
+  register: path
+
+- debug:
+    msg: "{{path.stdout}}"
+
+#- name: Run the hugo command locally
+#  connection: local
+#  shell: "cd .. && hugo"
+#  register: localPath
+#
+#- debug:
+#    msg: "{{ localPath.stdout }}"
+
+- debug:
+    msg: "{{projectPath}}/public/*"
+- debug:
+    msg: "{{projectPath}}/{{zipFileName}}"
+
+- name: Comppress directory {{projectPath}}/public/ into {{projectPath}}/{{zipFileName}}
+  connection: local
+  community.general.archive:
+    path: "{{projectPath}}/public/*"
+    dest: "{{projectPath}}/{{zipFileName}}"
+    format: zip
+
+#- name: Create remote directory if it doesn't exist
+#  ansible.builtin.file:
+#    path: "{{ destinationDirectory }}"
+#    state: directory
+#    mode: '0755'
+#  become: yes
+#  ignore_errors: true
+
+- name: Create directory
+  file:
+    path: "{{ destinationDirectory }}"
+    state: directory
+  become: yes
+#  ignore_errors: true
+
+- name: Copy {{projectPath}}/{{zipFileName}} to JHooq.com
+  ansible.builtin.copy:
+    src: "{{projectPath}}/{{zipFileName}}"
+    dest: "{{destinationDirectory}}"
+    mode: 0770
+  become: yes
+
+
+- name: Install unzip (Ubuntu/Debian)
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+  become: yes
+
+- name: Extract {{destinationDirectory}}/{{zipFileName}} into {{destinationDirectory}}
+  ansible.builtin.unarchive:
+    src: "{{destinationDirectory}}/{{zipFileName}}"
+    dest: "{{destinationDirectory}}"
+    remote_src: "yes"
+  become: yes
+
+- name: Remove the {{destinationDirectory}}/{{zipFileName}}
+  ansible.builtin.file:
+    path: "{{destinationDirectory}}/{{zipFileName}}"
+    state: absent
+  become: yes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
